@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react'
 import { fetchCollection } from '../api.js'
 import { CollectionState } from './CollectionState.jsx'
 
+const usersApiUrl = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users/`
+  : 'http://localhost:8000/api/users/'
+
 function Users() {
   const [users, setUsers] = useState([])
   const [status, setStatus] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchCollection('users')
+    fetchCollection('users', usersApiUrl)
       .then((data) => { setUsers(data); setStatus({ loading: false, error: '' }) })
       .catch(() => setStatus({ loading: false, error: 'We could not reach the API. Check that the backend is running.' }))
   }, [])

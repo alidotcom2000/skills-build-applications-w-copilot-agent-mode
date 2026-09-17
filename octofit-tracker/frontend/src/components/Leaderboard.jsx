@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react'
 import { fetchCollection } from '../api.js'
 import { CollectionState } from './CollectionState.jsx'
 
+const leaderboardApiUrl = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+  : 'http://localhost:8000/api/leaderboard/'
+
 function Leaderboard() {
   const [rows, setRows] = useState([])
   const [status, setStatus] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchCollection('leaderboard')
+    fetchCollection('leaderboard', leaderboardApiUrl)
       .then((data) => { setRows(data); setStatus({ loading: false, error: '' }) })
       .catch(() => setStatus({ loading: false, error: 'We could not reach the API. Check that the backend is running.' }))
   }, [])

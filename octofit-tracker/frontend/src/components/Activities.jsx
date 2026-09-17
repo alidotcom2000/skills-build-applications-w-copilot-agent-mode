@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react'
 import { fetchCollection } from '../api.js'
 import { CollectionState } from './CollectionState.jsx'
 
+const activitiesApiUrl = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+  : 'http://localhost:8000/api/activities/'
+
 function Activities() {
   const [activities, setActivities] = useState([])
   const [status, setStatus] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchCollection('activities')
+    fetchCollection('activities', activitiesApiUrl)
       .then((data) => { setActivities(data); setStatus({ loading: false, error: '' }) })
       .catch(() => setStatus({ loading: false, error: 'We could not reach the API. Check that the backend is running.' }))
   }, [])
